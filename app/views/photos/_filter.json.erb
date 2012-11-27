@@ -1,2 +1,9 @@
 <h1><%= @photo.photo_url %></h1>
-<p><img src=<%= @photo.photo_url %>>
+<p><img class="vintage" src=<%= @photo.photo_url %>>
+<script>
+$(function () {
+    $('img.vintage').click(function () {
+        $(this).vintage();
+    });
+});
+</script>
