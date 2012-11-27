@@ -5,11 +5,26 @@ $(document).ready ->
 Filters = {
 
   init: ->
+    $('.image').hide()
+    Filters.createPreview()
+
+    # Event bindings
     $('button#upload').on 'click', (event) ->
       filepicker.pick (FPFile) ->
         Filters.toggleUploadButton()
         Filters.renderPhoto(FPFile.url)
         Filters.sendPhotoUrl(FPFile.url)
+
+    $('button#sunrise').on 'click', (event) ->
+      Filters.camanCanvas.revert()
+      Filters.camanCanvas.sunrise().render()
+    $('button#jarques').on 'click', (event) ->
+      Filters.camanCanvas.revert()
+      Filters.camanCanvas.jarques().render()
+    $('button#concentrate').on 'click', (event) ->
+      Filters.camanCanvas.revert()
+      Filters.camanCanvas.concentrate().render()
+
 
 
   sendPhotoUrl: (url) ->
@@ -30,5 +45,8 @@ Filters = {
 
   toggleUploadButton: ->
     $('button#upload').toggle()
+
+  createPreview: ->
+    Filters.camanCanvas = Caman('.image')
 
 }
