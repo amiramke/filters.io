@@ -19,6 +19,9 @@ module FiltersIo
 
     # config.assets.initialize_on_precompile = false
 
+    # Filepicker config
+    config.filepicker_rails.api_key = "A8bPQLUeRg6RglPocYMdGz" #"AKzvXuXiWTqnn6TkGn4QEz"
+
     # On config/application.rb forcing your application to not access the DB
     # or load models when precompiling your assets.
 

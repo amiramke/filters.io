@@ -22,6 +22,7 @@ end
 
 gem 'jquery-rails'
 gem 'devise'
+gem 'filepicker-rails'
 gem 'thin'
 
 # To use ActiveModel has_secure_password
