@@ -15,6 +15,13 @@ module FiltersIo
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    # If you are deploying Rails 3.1 on Heroku, you may want to set:
+
+    # config.assets.initialize_on_precompile = false
+
+    # On config/application.rb forcing your application to not access the DB
+    # or load models when precompiling your assets.
+
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
 
