@@ -1,5 +1,4 @@
 module ApplicationHelper
-end
 
 module BootstrapFlashHelper  
   def bootstrap_flash
@@ -16,5 +15,7 @@ module BootstrapFlashHelper
      flash_messages << text if message
    end
    flash_messages.join("\n").html_safe
- end
+  end
+end
+
 end
