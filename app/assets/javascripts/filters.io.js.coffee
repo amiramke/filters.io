@@ -21,8 +21,10 @@ Filters = {
       data: { photo: {photo_url: url} }
       complete: (json, status) ->
         Filters.renderHTML(json.responseText)
+        $('button').hide()
         Filters.createPreview()
         Filters.filterBindings()
+        $('button').show()
       })
 
   renderHTML: (html_string) ->
@@ -38,30 +40,37 @@ Filters = {
   storeBase64: ->
     raw_data = Filters.camanCanvas.toBase64()
     raw_data = raw_data.replace("data:image/png;base64,", "")
-    filepicker.store(raw_data, { filename: 'filtered_image.jpg', base64decode: true, mimetype: 'image/jpg'}, (FPFile) ->
+    filepicker.store(raw_data, { filename: 'image', base64decode: true, mimetype: 'image/png'}, (FPFile) ->
       filepicker.export(FPFile)
       )
 
   filterBindings: ->
     $('button#xxpro').on 'click', (event) ->
-      debugger
-      # Filters.camanCanvas.revert()
-      # Filters.camanCanvas.xxpro().render()
+      Filters.toggleActiveFilter(@)
+      Filters.camanCanvas.revert()
+      Filters.camanCanvas.xxpro().render()
     $('button#toasty').on 'click', (event) ->
+      Filters.toggleActiveFilter(@)
       Filters.camanCanvas.revert()
       Filters.camanCanvas.toasty().render()
     $('button#memphis').on 'click', (event) ->
+      Filters.toggleActiveFilter(@)
       Filters.camanCanvas.revert()
       Filters.camanCanvas.memphis().render()
     $('button#apply').on 'click', (event) ->
       Filters.storeBase64()
 
+  toggleActiveFilter: (button) ->
+    $('button.active-filter').toggleClass("active-filter")
+    $(button).toggleClass("active-filter")
+
+
   registerFilters: ->
     Caman.Filter.register "xxpro", ->
-      @newLayer ->
-        @setBlendingMode("multiply")
-        @opacity(50);
-        @fillColor("#f5f2f2")
+      # @newLayer ->
+      #   @setBlendingMode("multiply")
+      #   @opacity(50);
+      #   @fillColor("#f5f2f2")
 
       @curves('rgb', [0, 0], [79, 46], [152, 149], [255, 255])
       @contrast(6)
@@ -82,10 +91,10 @@ Filters = {
       this
 
     Caman.Filter.register "memphis", ->
-      @newLayer ->
-        @setBlendingMode("multiply")
-        @opacity(50)
-        @fillColor('#f6daae')
+      # @newLayer ->
+      #   @setBlendingMode("softLight")
+      #   @fillColor('#f6daae')
+      #   @opacity(50)
 
       @curves('g', [0, 0], [98, 112], [174, 204], [238, 235])
       @curves('b', [0, 0], [64, 95], [193, 170], [255, 255])
@@ -93,7 +102,7 @@ Filters = {
       @curves('r', [0, 0], [55, 71], [160, 184], [255, 255])
       @curves('g', [0, 0], [53, 74], [178, 182], [255, 255])
 
-      @contrast
+      @contrast(8)
 
       this
 
