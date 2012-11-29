@@ -1,0 +1,124 @@
+@import "twitter/bootstrap/bootstrap";
+
+@import "twitter/bootstrap/responsive";
+
+.moustache {
+    background: none repeat scroll 0 0 #f32888;
+    display: block;
+    height: 6px;
+    margin: -6px auto 0;
+    width: 10em;
+}
+
+#full-width {
+    border-top: 6px solid #505050;
+    margin: 0px 0 auto;
+    width: 100%;
+}
+
+.logo {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 25px 15px;
+}
+
+#headline {
+   background-attachment: scroll;
+   background-clip: border-box;
+   background-color: transparent;
+   background-image: url("headline.png");
+   background-origin: padding-box;
+   background-position: center center;
+   background-repeat: no-repeat;
+   background-size: 100% auto;
+   height: 215px;
+   margin: 0 auto 70px;
+   max-width: 100%;
+   text-indent: -9999px;
+   width: 781px;
+}
+
+#hero {
+    text-align: center;
+    margin-top: 30px;
+    width: 100%;
+    height: 332px;
+    padding-top: 20px;
+    overflow: hidden;
+    background: transparent url('slider1.jpg') no-repeat center bottom;
+    background-size: cover;
+}
+
+.upload-button {
+    display: inline-block;
+    background: #ecc785;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f32888), color-stop(100%, #f32888));
+    background: -moz-linear-gradient(center top, #f32888 0%, #f32888 100%);
+    -webkit-box-shadow: 0px 1px 0px 0px #ffffff inset;
+    -moz-box-shadow: 0px 1px 0px 0px #ffffff inset;
+    box-shadow: 0px 1px 0px 0px #ffffff inset;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-shadow: 0px 1px 0px #f6e4c7;
+    padding: 10px 40px;
+    border-color: #f32888;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 28px;
+    line-height: 30px;
+    color: #FFFFFF;
+    font-weight: 100;
+    font-family: helvetica;
+    position: relative;
+    bottom: 60px;
+}
+.upload-button:hover {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#DB2E80), color-stop(100%,#DB2E80));
+    background: -moz-linear-gradient(center top, #DB2E80 0%, #DB2E80 100%);
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.upload-button:active {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3DB2FF), color-stop(100%,#3DB2FF));
+    background: -moz-linear-gradient(center top, #40EBE4 0%, #3DB2FF 100%);
+    -webkit-box-shadow: 0px 2px 5px #b7915c inset;
+    -moz-box-shadow: 0px 2px 5px #b7915c inset;
+    box-shadow: 0px 2px 5px #b7915c inset;
+    border-color: #3DB2FF;
+    color: #000;
+}
+
+.footer {
+    text-align: center;
+}
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings");
+@iconWhiteSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings-white");
+
+// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
+// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not
+//       have the proper paths. So for now we use the absolute path.
+@fontAwesomeEotPath: asset-path("fontawesome-webfont.eot");
+@fontAwesomeWoffPath: asset-path("fontawesome-webfont.woff");
+@fontAwesomeTtfPath: asset-path("fontawesome-webfont.ttf");
+@fontAwesomeSvgPath: asset-path("fontawesome-webfont.svg");
+
+// Font Awesome
+@import "fontawesome";
+
+// Glyphicons
+//@import "twitter/bootstrap/sprites.less";
+
+// Your custom LESS stylesheets goes here
+//
+// Since bootstrap was imported above you have access to its mixins which
+// you may use and inherit here
+//
+// If you'd like to override bootstrap's own variables, you can do so here as well
+// See http://twitter.github.com/bootstrap/customize.html#variables for their names and documentation
+//
+// Example:
+// @linkColor: #ff0000;

@@ -8,7 +8,7 @@ Filters = {
     Filters.registerFilters()
 
     # Event bindings
-    $('button#upload').on 'click', (event) ->
+    $('#upload').on 'click', (event) ->
       filepicker.pick {container: 'modal'}, (FPFile) ->
         Filters.toggleUploadButton()
         Filters.renderPhoto(FPFile.url)
