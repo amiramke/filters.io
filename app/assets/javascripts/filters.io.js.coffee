@@ -25,18 +25,18 @@ Filters = {
 
 
   renderPhoto: (photo_url) ->
-    html_string = "<p><img class='image' data-camanheight='500' src='#{photo_url}'>"
-    $('div#container').html(html_string)
+    html_string = "<p><img class='image' data-camanheight='420' src='#{photo_url}'>"
+    $('#uploaded-image').html(html_string)
 
   renderFilterButtons: ->
-    html_string = "<p><tr><td><button id='xxpro'>xxpro</button></td><td><button id='toasty'>toasty</button></td><td><button id='memphis'>memphis</button></td><td><button id='apply'>Save</button></td></tr>"
-    $('div#container').append(html_string)
+    html_string = "<button class= 'filter-button' id='xxpro'>xxpro</button><button class= 'filter-button' id='toasty'>toasty</button><button class= 'filter-button' id='memphis'>memphis</button><button id='save-button'>Save</button>"
+    $('#filter-buttons').append(html_string)
 
   renderHTML: (html_string) ->
     $('div#container').append(html_string)
 
   toggleUploadButton: ->
-    $('button#upload').toggle()
+    $('#upload').toggle()
 
   createPreview: ->
     $('.image').hide()
@@ -64,7 +64,7 @@ Filters = {
       Filters.toggleActiveFilter(@)
       Filters.camanCanvas.revert()
       Filters.camanCanvas.memphis().render()
-    $('button#apply').on 'click', (event) ->
+    $('button#save-button').on 'click', (event) ->
       Filters.storeBase64()
 
   toggleActiveFilter: (button) ->
