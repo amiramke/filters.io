@@ -11,8 +11,7 @@ Filters = {
     $('#upload').on 'click', (event) ->
       filepicker.pick {container: 'modal'}, (FPFile) ->
         Filters.toggleUploadButton()
-        Filters.renderPhoto(FPFile.url)
-        Filters.createPreview()
+        #Filters.renderPhoto(FPFile.url)
         Filters.sendPhotoUrl(FPFile.url)
 
   sendPhotoUrl: (url) ->
@@ -20,7 +19,10 @@ Filters = {
       type: 'POST'
       url: 'http://localhost:3000/photos'
       dataType: 'json'
-      data: { photo: {photo_url: url} }
+      data: { photo: {url: url} }
+      complete: (json, response) ->
+        Filters.renderHTML(json.responseText)
+        Filters.createPreview()
       })
 
 
@@ -33,7 +35,7 @@ Filters = {
     $('#filter-buttons').append(html_string)
 
   renderHTML: (html_string) ->
-    $('div#container').append(html_string)
+    $('div#container').html(html_string)
 
   toggleUploadButton: ->
     $('#upload').toggle()

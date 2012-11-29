@@ -44,28 +44,16 @@
       <div class="moustache"></div>
       <div class="logo"><%= image_tag "logo.png" %></div>
     </div>
-      <div id="hero">
-          <div id="uploaded-image"></div>
-          <div id="headline"></div>
-          <a class="upload-button" id="upload">upload</a>
-      </div>
-      <div id="filter-buttons"></div>
-
-    <br>
+    <div id="container">
+        <%= bootstrap_flash %>
+        <%= yield %>
+    </div>
     <div class="container-fluid">
       <div class="row-fluid">
-        <!-- <div class="span12"> -->
-          <%= bootstrap_flash %>
-          <%= yield %>
-        <!-- </div> -->
-        <!--/row-->
-
-      <footer>
-        <br><br><br><br><br><br>
-        <p class="footer">- For the kids who sat in the back of the bus. -</p>
-      </footer>
-
-    </div> <!-- /container -->
+        <footer>
+          <p class="footer">- For the kids who sat in the back of the bus. -</p>
+        </footer>
+      </div>
     </div>
     <!-- Javascripts
     ================================================== -->
