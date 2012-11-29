@@ -11,6 +11,8 @@ Filters = {
     $('button#upload').on 'click', (event) ->
       filepicker.pick {container: 'modal'}, (FPFile) ->
         Filters.toggleUploadButton()
+        Filters.renderPhoto(FPFile.url)
+        Filters.createPreview()
         Filters.sendPhotoUrl(FPFile.url)
 
   sendPhotoUrl: (url) ->
@@ -19,23 +21,28 @@ Filters = {
       url: 'http://localhost:3000/photos'
       dataType: 'json'
       data: { photo: {photo_url: url} }
-      complete: (json, status) ->
-        Filters.renderHTML(json.responseText)
-        $('button').hide()
-        Filters.createPreview()
-        Filters.filterBindings()
-        $('button').show()
       })
 
-  renderHTML: (html_string) ->
+
+  renderPhoto: (photo_url) ->
+    html_string = "<p><img class='image' data-camanheight='500' src='#{photo_url}'>"
     $('div#container').html(html_string)
+
+  renderFilterButtons: ->
+    html_string = "<p><tr><td><button id='xxpro'>xxpro</button></td><td><button id='toasty'>toasty</button></td><td><button id='memphis'>memphis</button></td><td><button id='apply'>Save</button></td></tr>"
+    $('div#container').append(html_string)
+
+  renderHTML: (html_string) ->
+    $('div#container').append(html_string)
 
   toggleUploadButton: ->
     $('button#upload').toggle()
 
   createPreview: ->
     $('.image').hide()
-    Filters.camanCanvas = Caman('.image')
+    Filters.camanCanvas = Caman '.image', ->
+      Filters.renderFilterButtons()
+      Filters.createFilterBindings()
 
   storeBase64: ->
     raw_data = Filters.camanCanvas.toBase64()
@@ -44,7 +51,7 @@ Filters = {
       filepicker.export(FPFile)
       )
 
-  filterBindings: ->
+  createFilterBindings: ->
     $('button#xxpro').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
       Filters.camanCanvas.revert()
