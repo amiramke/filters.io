@@ -17,7 +17,7 @@ module FiltersIo
 
     # If you are deploying Rails 3.1 on Heroku, you may want to set:
 
-    # config.assets.initialize_on_precompile = false
+    config.assets.initialize_on_precompile = false
 
     # Filepicker config
     config.filepicker_rails.api_key = "A8bPQLUeRg6RglPocYMdGz" #"AKzvXuXiWTqnn6TkGn4QEz"
