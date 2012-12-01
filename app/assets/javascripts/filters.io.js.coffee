@@ -11,7 +11,7 @@ Filters = {
     # Event bindings
     $('#upload').on 'click', (event) ->
       filepicker.pick {container: 'modal'}, (FPFile) ->
-        #Filters.sendPhotoUrl(FPFile.url)
+        Filters.sendPhotoUrl(FPFile.url)
 
   sendPhotoUrl: (url) ->
     $.ajax({
