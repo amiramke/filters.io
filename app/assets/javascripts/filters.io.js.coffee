@@ -11,8 +11,7 @@ Filters = {
     # Event bindings
     $('#upload').on 'click', (event) ->
       filepicker.pick {container: 'modal'}, (FPFile) ->
-        #Filters.toggleUploadButton()
-        Filters.sendPhotoUrl(FPFile.url)
+        #Filters.sendPhotoUrl(FPFile.url)
 
   sendPhotoUrl: (url) ->
     $.ajax({
@@ -31,9 +30,6 @@ Filters = {
 
   renderHTML: (html_string) ->
     $('div#container').html(html_string)
-
-  toggleUploadButton: ->
-    $('#upload').toggle()
 
   createPreview: ->
     $('.image').hide()
@@ -78,12 +74,9 @@ Filters = {
     $('#filter-preview').prepend(clone)
     Filters.applyCount += 1
 
-
-
   toggleActiveFilter: (button) ->
     $('button.active-filter').toggleClass("active-filter")
     $(button).toggleClass("active-filter")
-
 
   registerFilters: ->
     Caman.Filter.register "xxpro", ->
@@ -125,6 +118,5 @@ Filters = {
       @contrast(8)
 
       this
-
 
 }
