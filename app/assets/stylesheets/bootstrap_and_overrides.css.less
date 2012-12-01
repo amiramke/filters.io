@@ -11,7 +11,7 @@
 }
 
 body {
-    background-image: url("brillant.png");
+    background-image: url("brilliant.png");
 }
 
 #full-width {
@@ -44,23 +44,30 @@ body {
 }
 
 #hero {
-    text-align: center;
-    margin-top: 30px;
-    width: 100%;
-    height: 350px;
-    padding-top: 20px;
-    overflow: hidden;
-    background: transparent url('slider1.jpg') no-repeat center bottom;
-    background-size: cover;
+  text-align: center;
+  margin-top: 30px;
+  width: 100%;
+  height: 350px;
+  padding-top: 20px;
+  overflow: hidden;
+  background: transparent url('slider1.jpg') no-repeat center bottom;
+  background-size: cover;
 }
 
-#uploaded-image {
-    margin-top: -20px;
+#filter-preview {
+  text-align: center;
+}
+
+canvas {
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  border: 10px;
+  border: solid 8px #505050;
 }
 
 #filter-buttons {
-    text-align: center;
-    padding-top: 20px;
+  text-align: center;
+  padding-top: 20px;
 }
 
 #filter-button {
@@ -109,8 +116,10 @@ body {
 
 .footer {
     text-align: center;
-    position: relative;
-    top: 150px;
+    position: absolute;
+    top: 750px;
+    width: 100%;
+
 }
 
 // Set the correct sprite paths

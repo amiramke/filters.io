@@ -6,12 +6,12 @@ Filters = {
 
   init: ->
     Filters.registerFilters()
+    Filters.applyCount = 0
 
     # Event bindings
     $('#upload').on 'click', (event) ->
       filepicker.pick {container: 'modal'}, (FPFile) ->
-        Filters.toggleUploadButton()
-        #Filters.renderPhoto(FPFile.url)
+        #Filters.toggleUploadButton()
         Filters.sendPhotoUrl(FPFile.url)
 
   sendPhotoUrl: (url) ->
@@ -25,13 +25,8 @@ Filters = {
         Filters.createPreview()
       })
 
-
-  renderPhoto: (photo_url) ->
-    html_string = "<p><img class='image' data-camanheight='420' src='#{photo_url}'>"
-    $('#uploaded-image').html(html_string)
-
   renderFilterButtons: ->
-    html_string = "<button class= 'filter-button' id='xxpro'>xxpro</button><button class= 'filter-button' id='toasty'>toasty</button><button class= 'filter-button' id='memphis'>memphis</button><button id='save-button'>Save</button>"
+    html_string = "<button id='original'>original</button><button class='filter-button' id='xxpro'>xxpro</button><button class='filter-button' id='toasty'>toasty</button><button class='filter-button' id='memphis'>memphis</button><button id='save-button'>Save</button>"
     $('#filter-buttons').append(html_string)
 
   renderHTML: (html_string) ->
@@ -42,6 +37,7 @@ Filters = {
 
   createPreview: ->
     $('.image').hide()
+    $('.image-clone').hide()
     Filters.camanCanvas = Caman '.image', ->
       Filters.renderFilterButtons()
       Filters.createFilterBindings()
@@ -54,20 +50,36 @@ Filters = {
       )
 
   createFilterBindings: ->
+    $('#original').on 'click', (event) ->
+      Filters.toggleActiveFilter(@)
+      Filters.cloneCanvas()
     $('button#xxpro').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
-      Filters.camanCanvas.revert()
+      Filters.cloneCanvas()
       Filters.camanCanvas.xxpro().render()
     $('button#toasty').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
-      Filters.camanCanvas.revert()
+      Filters.cloneCanvas()
       Filters.camanCanvas.toasty().render()
     $('button#memphis').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
-      Filters.camanCanvas.revert()
+      Filters.cloneCanvas()
       Filters.camanCanvas.memphis().render()
     $('button#save-button').on 'click', (event) ->
       Filters.storeBase64()
+
+  cloneCanvas: ->
+    debugger
+    clone = $('.image-clone').clone()
+    # revert_id = "revert#{Filters.applyCount}"
+    # $('.image-clone').attr({ id: revert_id })
+    # revert_id = "##{revert_id}"
+    # Filters.camanCanvas = Caman(revert_id)
+    # $('canvas:last').remove()
+    # $('#filter-preview').prepend(clone)
+    # Filters.applyCount += 1
+
+
 
   toggleActiveFilter: (button) ->
     $('button.active-filter').toggleClass("active-filter")
