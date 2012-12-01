@@ -16,7 +16,6 @@ module FiltersIo
     # -- all .rb files in that directory are automatically loaded.
 
     # If you are deploying Rails 3.1 on Heroku, you may want to set:
-
     config.assets.initialize_on_precompile = false
 
     # Filepicker config
