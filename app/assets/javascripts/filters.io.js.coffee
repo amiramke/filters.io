@@ -69,15 +69,14 @@ Filters = {
       Filters.storeBase64()
 
   cloneCanvas: ->
-    debugger
     clone = $('.image-clone').clone()
-    # revert_id = "revert#{Filters.applyCount}"
-    # $('.image-clone').attr({ id: revert_id })
-    # revert_id = "##{revert_id}"
-    # Filters.camanCanvas = Caman(revert_id)
-    # $('canvas:last').remove()
-    # $('#filter-preview').prepend(clone)
-    # Filters.applyCount += 1
+    revert_id = "revert#{Filters.applyCount}"
+    $('.image-clone').attr({ id: revert_id })
+    revert_id = "##{revert_id}"
+    Filters.camanCanvas = Caman(revert_id)
+    $('canvas:last').remove()
+    $('#filter-preview').prepend(clone)
+    Filters.applyCount += 1
 
 
 
