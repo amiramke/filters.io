@@ -58,33 +58,36 @@ Filters = {
       Filters.toggleActiveFilter(@)
       Filters.cloneCanvas()
     $('#xxpro').on 'click', (event) ->
-      Filters.toggleActiveFilter(@)
-      Filters.cloneCanvas()
-      Filters.camanCanvas.xxpro().render()
+      Filters.applyFilter()
     $('#toasty').on 'click', (event) ->
-      Filters.toggleActiveFilter(@)
-      Filters.cloneCanvas()
-      Filters.camanCanvas.toasty().render()
+      Filters.applyFilter()
     $('#memphis').on 'click', (event) ->
-      Filters.toggleActiveFilter(@)
-      Filters.cloneCanvas()
-      Filters.camanCanvas.memphis().render()
+      Filters.applyFilter()
     $('#colt').on 'click', (event) ->
-      Filters.toggleActiveFilter(@)
-      Filters.cloneCanvas()
-      Filters.camanCanvas.colt().render()
+      Filters.applyFilter()
     $('#domo').on 'click', (event) ->
-      Filters.toggleActiveFilter(@)
-      Filters.cloneCanvas()
-      Filters.camanCanvas.domo().render()
+      Filters.applyFilter()
     $('#arkham').on 'click', (event) ->
-      Filters.toggleActiveFilter(@)
-      Filters.cloneCanvas()
-      Filters.camanCanvas.arkham().render()
+      Filters.applyFilter()
     $('#save-button').on 'click', (event) ->
       Filters.storeBase64()
 
-  renderFilter: ->
+  applyFilter: ->
+    Filters.disableButtons()
+    Filters.toggleActiveFilter(event.target)
+    Filters.cloneCanvas()
+    Filters.renderFilter(event.target.id)
+    Filters.enableButtons()
+
+  renderFilter: (filter_name) ->
+    switch filter_name
+      when 'xxpro' then Filters.camanCanvas.xxpro()
+      when 'toasty' then Filters.camanCanvas.toasty()
+      when 'memphis' then Filters.camanCanvas.memphis()
+      when 'colt' then Filters.camanCanvas.colt()
+      when 'domo' then Filters.camanCanvas.domo()
+      when 'arkham' then Filters.camanCanvas.arkham()
+
     Filters.camanCanvas.render ->
       Filters.enableButtons()
 
