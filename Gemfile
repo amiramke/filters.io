@@ -25,6 +25,15 @@ group :development do
   gem 'quiet_assets'
 end
 
+gem "rspec-rails", :group => [:test, :development]
+group :test do
+  gem "factory_girl_rails"
+  gem "capybara"
+  gem 'faker'
+  gem 'spork-rails'
+  #gem 'capybara-webkit'
+end
+
 gem 'jquery-rails'
 gem 'devise'
 gem 'filepicker-rails'
