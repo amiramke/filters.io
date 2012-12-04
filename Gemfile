@@ -31,6 +31,7 @@ group :test do
   gem "capybara"
   gem 'faker'
   gem 'spork-rails'
+  gem 'jasmine'
   #gem 'capybara-webkit'
 end
 

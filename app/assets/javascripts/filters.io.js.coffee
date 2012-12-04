@@ -16,7 +16,7 @@ Filters = {
   sendPhotoUrl: (url) ->
     $.ajax({
       type: 'POST'
-      url: 'http://www.filters.io/photos'
+      url: 'http://localhost:3000/photos'
       dataType: 'json'
       data: { photo: {url: url} }
       complete: (json, response) ->
@@ -51,18 +51,34 @@ Filters = {
       Filters.cloneCanvas()
     $('button#xxpro').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
+      Filters.disableButtons()
       Filters.cloneCanvas()
-      Filters.camanCanvas.xxpro().render()
+      Filters.camanCanvas.xxpro()
+      Filters.renderFilter()
     $('button#toasty').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
+      Filters.disableButtons()
       Filters.cloneCanvas()
-      Filters.camanCanvas.toasty().render()
+      Filters.camanCanvas.toasty()
+      Filters.renderFilter()
     $('button#memphis').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
+      Filters.disableButtons()
       Filters.cloneCanvas()
-      Filters.camanCanvas.memphis().render()
+      Filters.camanCanvas.memphis()
+      Filters.renderFilter()
     $('button#save-button').on 'click', (event) ->
       Filters.storeBase64()
+
+  renderFilter: ->
+    Filters.camanCanvas.render ->
+      Filters.enableButtons()
+
+  disableButtons: ->
+    $('button').attr("disabled", "disabled")
+
+  enableButtons: ->
+    $('button').removeAttr("disabled")
 
   cloneCanvas: ->
     clone = $('.image-clone').clone()
