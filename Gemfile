@@ -25,6 +25,19 @@ group :development do
   gem 'quiet_assets'
 end
 
+group :test, :development do
+  gem 'rspec-rails'
+  gem 'jasmine'
+end
+
+group :test do
+  gem "factory_girl_rails"
+  gem "capybara"
+  gem 'faker'
+  gem 'spork-rails'
+  #gem 'capybara-webkit'
+end
+
 gem 'jquery-rails'
 gem 'devise'
 gem 'filepicker-rails'
