@@ -34,4 +34,12 @@ describe("Filters", function() {
     });
   });
 
+  describe("#renderFilterButtons", function() {
+    it("appends filter buttons to the correct container", function() {
+      
+    });
+
+    
+  });
+
 });

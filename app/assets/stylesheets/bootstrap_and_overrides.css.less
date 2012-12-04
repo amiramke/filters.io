@@ -12,6 +12,7 @@
 
 body {
     background-image: url("brilliant.png");
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 #full-width {
@@ -65,12 +66,36 @@ canvas {
   border: solid 8px #505050;
 }
 
-#filter-buttons {
-  text-align: center;
-  padding-top: 20px;
+span.active-filter:hover {
+  position: relative;
+  top: 0px;
 }
 
-#filter-button {
+#filter-buttons {
+  margin-top: 30px;
+}
+
+button.filter{
+  text-align: center;
+  cursor: default;
+  display: inline;
+  margin: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 13px;
+  -webkit-transition: margin 0.2s ease-out;
+  -moz-transition: margin 0.2s ease-out;
+  -o-transition: margin 0.2s ease-out;
+  border: 0px;
+  background-color: transparent;
+}
+
+button.filter:hover {
+  position: relative;
+  top: -2px;
+}
+
+.filter-button {
   padding: 5px;
 }
 
@@ -119,6 +144,14 @@ canvas {
     top: 750px;
     width: 100%;
 
+}
+
+.active-filter {
+    border: 30px;
+}
+
+#save-button {
+    color: #f32888;
 }
 
 // Set the correct sprite paths
