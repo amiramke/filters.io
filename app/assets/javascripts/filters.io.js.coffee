@@ -2,7 +2,7 @@ $(document).ready ->
   Filters.init()
   filepicker.setKey('A8bPQLUeRg6RglPocYMdGz')
 
-Filters = {
+window.Filters = {
 
   init: ->
     Filters.registerFilters()
