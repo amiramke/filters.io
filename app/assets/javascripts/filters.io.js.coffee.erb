@@ -29,6 +29,9 @@ Filters = {
     <button class='filter' id='xxpro'>xxpro</button>
     <button class='filter' id='toasty'>toasty</button>
     <button class='filter' id='memphis'>memphis</button>
+    <button class='filter' id='colt'>colt</button>
+    <button class='filter' id='domo'>domo</button>
+    <button class='filter' id='arkham'>arkham</button>
     <button class='filter' id='save-button'>Save</button>"
     $('#filter-buttons').append(buttons)
     Filters.toggleActiveFilter($('#original'))
@@ -66,9 +69,21 @@ Filters = {
       Filters.toggleActiveFilter(@)
       Filters.cloneCanvas()
       Filters.camanCanvas.memphis().render()
+    $('#colt').on 'click', (event) ->
+      Filters.toggleActiveFilter(@)
+      Filters.cloneCanvas()
+      Filters.camanCanvas.colt().render()
+    $('#domo').on 'click', (event) ->
+      Filters.toggleActiveFilter(@)
+      Filters.cloneCanvas()
+      Filters.camanCanvas.domo().render()
+    $('#arkham').on 'click', (event) ->
+      Filters.toggleActiveFilter(@)
+      Filters.cloneCanvas()
+      Filters.camanCanvas.arkham().render()
     $('#save-button').on 'click', (event) ->
       Filters.storeBase64()
-  
+
   renderFilter: ->
     Filters.camanCanvas.render ->
       Filters.enableButtons()
@@ -97,20 +112,20 @@ Filters = {
 
   registerFilters: ->
     Caman.Filter.register "xxpro", ->
-      # @newLayer ->
-      #   @setBlendingMode("multiply")
-      #   @opacity(50);
-      #   @fillColor("#f5f2f2")
+     # @newLayer ->
+     #   @setBlendingMode("multiply")
+     #   @opacity(50);
+     #   @fillColor("#f5f2f2")
 
-      @curves('rgb', [0, 0], [79, 46], [152, 149], [255, 255])
-      @contrast(6)
-      @curves('b', [0, 45], [55, 73], [170, 145], [255, 255])
+     @curves('rgb', [0, 0], [79, 46], [152, 149], [255, 255])
+     @contrast(6)
+     @curves('b', [0, 45], [55, 73], [170, 145], [255, 255])
 
-      @contrast(8)
-      @exposure(-10)
-      @vibrance(20)
+     @contrast(8)
+     @exposure(-10)
+     @vibrance(20)
 
-      this
+     this
 
     Caman.Filter.register "toasty", ->
       @curves('r', [0, 71], [49, 104], [120, 172], [178, 227])
@@ -136,4 +151,40 @@ Filters = {
 
       this
 
+    Caman.Filter.register "colt", ->
+      @brightness(8)
+      @contrast(6)
+      @saturation(-9)
+      @curves('r', [11, 14], [98, 98], [174, 174], [255, 241])
+      @curves('g', [0, 4], [98, 98], [174, 174], [250, 247])
+      @curves('b', [0, 33], [44, 53], [114, 120], [252, 231])
+      @saturation(-15)
+      @brightness(-5)
+      @contrast(5)
+      @brightness(-5)
+      @contrast(9)
+      @curves('r', [0, 39], [98, 112], [174, 204], [255, 255])
+
+      @brightness(-4)
+      @contrast(3)
+
+      this
+
+    Caman.Filter.register "domo", ->
+      @brightness(8)
+      @contrast(15)
+      @curves('r', [0, 0], [86, 50], [178, 180], [255, 255])
+      @curves('g', [0, 0], [86, 50], [178, 180], [255, 255])
+      @curves('b', [0, 0], [86, 50], [178, 180], [255, 255])
+      @brightness(-5)
+
+      this
+
+    Caman.Filter.register "arkham", ->
+      @saturation(-100)
+      @contrast(5)
+      @vibrance(-10)
+      @brightness(-7)
+
+      this
 }
