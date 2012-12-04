@@ -16,7 +16,7 @@ Filters = {
   sendPhotoUrl: (url) ->
     $.ajax({
       type: 'POST'
-      url: 'http://localhost:3000/photos'
+      url: 'http://www.filters.io/photos'
       dataType: 'json'
       data: { photo: {url: url} }
       complete: (json, response) ->
