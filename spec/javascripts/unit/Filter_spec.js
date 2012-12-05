@@ -1,13 +1,6 @@
 describe("Filters", function() {
 
   describe("#init", function() {
-    it("registers filters", function() {
-      spyOn(Filters, 'registerFilters');
-      Filters.init();
-
-      expect(Filters.registerFilters).toHaveBeenCalled();
-    });
-
     it("starts with an applyCount of 0", function() {
       Filters.init();
 
@@ -36,10 +29,10 @@ describe("Filters", function() {
 
   describe("#renderFilterButtons", function() {
     it("appends filter buttons to the correct container", function() {
-      
+
     });
 
-    
+
   });
 
 });

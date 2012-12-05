@@ -2,7 +2,7 @@ $(document).ready ->
   Filters.init()
   filepicker.setKey('A8bPQLUeRg6RglPocYMdGz')
 
-Filters = {
+window.Filters = {
 
   init: ->
     # Workaround for CamanJS store method that does not let us access the same id or class twice
@@ -52,25 +52,15 @@ Filters = {
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
       Filters.cloneCanvas()
-    $('#xxpro').on 'click', (event) ->
-      Filters.applyFilter()
-    $('#toasty').on 'click', (event) ->
-      Filters.applyFilter()
-    $('#memphis').on 'click', (event) ->
-      Filters.applyFilter()
-    $('#colt').on 'click', (event) ->
-      Filters.applyFilter()
-    $('#domo').on 'click', (event) ->
-      Filters.applyFilter()
-    $('#arkham').on 'click', (event) ->
-      Filters.applyFilter()
     $('#save-button').on 'click', (event) ->
       Filters.storeBase64()
+    $('button.filter').on 'click', (event) ->
+      Filters.applyFilter()
 
   # Disable all filter buttons while filter is being applied
   # Clone the canvas for future use
   # Render the specific filter related to click event
-  applyFilter: =>
+  applyFilter: ->
     Filters.disableButtons()
     Filters.toggleActiveFilter(event.target)
     Filters.cloneCanvas()
@@ -83,9 +73,6 @@ Filters = {
     $(button).toggleClass("active-filter")
     $(button).fadeTo( 1000, .5 )
 
-  # Clone .image-clone element
-  # Use Filters.applyCount to work around Caman limitation with re-using class/id names
-  # Add cloned element to DOM
   cloneCanvas: ->
     clone = $('.image-clone').clone()
     revert_id = "revert#{Filters.applyCount}"
@@ -94,19 +81,12 @@ Filters = {
     Filters.camanCanvas = Caman(revert_id)
     $('canvas:last').remove()
     $('#filter-preview').prepend(clone)
+
+    # Used to work around Caman limitation with re-using class/id names
     Filters.applyCount += 1
 
-  # Render filter according to name
   renderFilter: (filter_name) ->
-    switch filter_name
-      when 'xxpro' then Filters.camanCanvas.xxpro()
-      when 'toasty' then Filters.camanCanvas.toasty()
-      when 'memphis' then Filters.camanCanvas.memphis()
-      when 'colt' then Filters.camanCanvas.colt()
-      when 'domo' then Filters.camanCanvas.domo()
-      when 'arkham' then Filters.camanCanvas.arkham()
-
-    # Set last filter used for naming the file later and re-enable buttons
+    Filters.camanCanvas[filter_name]()
     Filters.lastFilterUsed = filter_name
     Filters.camanCanvas.render ->
       Filters.enableButtons()
@@ -120,9 +100,8 @@ Filters = {
 
     # If not keeping track of users' filtered photos, should find a way to avoid re-uploading photo
     # to filepicker.io before allowing user to save the image
-    filepicker.store(raw_data, { filename: filename, base64decode: true, mimetype: 'image/png' }, (FPFile) ->
+    filepicker.store raw_data, { filename: filename, base64decode: true, mimetype: 'image/png' }, (FPFile) ->
       filepicker.export(FPFile)
-      )
 
   disableButtons: ->
     $('button.filter').attr("disabled", "disabled")
