@@ -5,7 +5,6 @@ $(document).ready ->
 window.Filters = {
 
   init: ->
-    # Workaround for CamanJS store method that does not let us access the same id or class twice
     Filters.applyCount = 0
 
     # Event bindings
@@ -14,7 +13,7 @@ window.Filters = {
         Filters.filename = FPFile.filename
         Filters.sendPhotoUrl(FPFile.url)
 
-  # Saves the url of where the photo is stored in the database
+  # Save the url of where the photo is stored in the database
   sendPhotoUrl: (url) ->
     $.ajax({
       type: 'POST'
@@ -26,14 +25,12 @@ window.Filters = {
         Filters.createPreview()
       })
 
-  # Replace container contents with new html
-  # Usually html contains the images in a partial from the rails backend
   renderHTML: (html_string) ->
     $('div#container').html(html_string)
 
   # Hide the two images & buttons from the partial
   # Create a CamanInstance from .image
-  # Then render filter buttons and bind events to them
+  # Then render filter buttons and bind events to them when canvas is rendered
   createPreview: ->
     $('button').hide()
     $('.image').hide()
@@ -42,12 +39,10 @@ window.Filters = {
       Filters.renderFilterButtons()
       Filters.createFilterBindings()
 
-  # Append buttons to #filter-buttons div and select Original as active
   renderFilterButtons: ->
     $('button').show()
     Filters.toggleActiveFilter($('#original'))
 
-  # Register click event listeners on filter buttons
   createFilterBindings: ->
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
@@ -66,7 +61,6 @@ window.Filters = {
     Filters.cloneCanvas()
     Filters.renderFilter(event.target.id)
 
-  # Fade in / fade out effect and set active class on clicked button
   toggleActiveFilter: (button) ->
     $('.active-filter').fadeTo( 1000, 1 )
     $('.active-filter').toggleClass("active-filter")
