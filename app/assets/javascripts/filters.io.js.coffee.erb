@@ -5,14 +5,16 @@ $(document).ready ->
 Filters = {
 
   init: ->
-    Filters.registerFilters()
+    # Workaround for CamanJS store method that does not let us access the same id or class twice
     Filters.applyCount = 0
 
     # Event bindings
     $('#upload').on 'click', (event) ->
       filepicker.pick {container: 'modal'}, (FPFile) ->
+        Filters.filename = FPFile.filename
         Filters.sendPhotoUrl(FPFile.url)
 
+  # Saves the url of where the photo is stored in the database
   sendPhotoUrl: (url) ->
     $.ajax({
       type: 'POST'
@@ -24,6 +26,21 @@ Filters = {
         Filters.createPreview()
       })
 
+  # Replace container contents with new html
+  # Usually html contains the images in a partial from the rails backend
+  renderHTML: (html_string) ->
+    $('div#container').html(html_string)
+
+  # Hide the two images from the partial and create a CamanInstance from one of those
+  # Then render filter buttons and bind events to them
+  createPreview: ->
+    $('.image').hide()
+    $('.image-clone').hide()
+    Filters.camanCanvas = Caman '.image', ->
+      Filters.renderFilterButtons()
+      Filters.createFilterBindings()
+
+  # Append buttons to #filter-buttons div and select Original as active
   renderFilterButtons: ->
     buttons = "<button class='filter' id='original'>original</button>
     <button class='filter' id='xxpro'>xxpro</button>
@@ -36,23 +53,7 @@ Filters = {
     $('#filter-buttons').append(buttons)
     Filters.toggleActiveFilter($('#original'))
 
-  renderHTML: (html_string) ->
-    $('div#container').html(html_string)
-
-  createPreview: ->
-    $('.image').hide()
-    $('.image-clone').hide()
-    Filters.camanCanvas = Caman '.image', ->
-      Filters.renderFilterButtons()
-      Filters.createFilterBindings()
-
-  storeBase64: ->
-    raw_data = Filters.camanCanvas.toBase64()
-    raw_data = raw_data.replace("data:image/png;base64,", "")
-    filepicker.store(raw_data, { filename: 'image', base64decode: true, mimetype: 'image/png'}, (FPFile) ->
-      filepicker.export(FPFile)
-      )
-
+  # Register click event listeners on filter buttons
   createFilterBindings: ->
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
@@ -72,31 +73,25 @@ Filters = {
     $('#save-button').on 'click', (event) ->
       Filters.storeBase64()
 
-  applyFilter: ->
+  # Disable all filter buttons while filter is being applied
+  # Clone the canvas for future use
+  # Render the specific filter related to click event
+  applyFilter: =>
     Filters.disableButtons()
     Filters.toggleActiveFilter(event.target)
     Filters.cloneCanvas()
     Filters.renderFilter(event.target.id)
-    Filters.enableButtons()
 
-  renderFilter: (filter_name) ->
-    switch filter_name
-      when 'xxpro' then Filters.camanCanvas.xxpro()
-      when 'toasty' then Filters.camanCanvas.toasty()
-      when 'memphis' then Filters.camanCanvas.memphis()
-      when 'colt' then Filters.camanCanvas.colt()
-      when 'domo' then Filters.camanCanvas.domo()
-      when 'arkham' then Filters.camanCanvas.arkham()
+  # Fade in / fade out effect and set active class on clicked button
+  toggleActiveFilter: (button) ->
+    $('.active-filter').fadeTo( 1000, 1 )
+    $('.active-filter').toggleClass("active-filter")
+    $(button).toggleClass("active-filter")
+    $(button).fadeTo( 1000, .5 )
 
-    Filters.camanCanvas.render ->
-      Filters.enableButtons()
-
-  disableButtons: ->
-    $('button.filter').attr("disabled", "disabled")
-
-  enableButtons: ->
-    $('button.filter').removeAttr("disabled")
-
+  # Clone .image-clone element
+  # Use Filters.applyCount to work around Caman limitation with re-using class/id names
+  # Add cloned element to DOM
   cloneCanvas: ->
     clone = $('.image-clone').clone()
     revert_id = "revert#{Filters.applyCount}"
@@ -107,87 +102,38 @@ Filters = {
     $('#filter-preview').prepend(clone)
     Filters.applyCount += 1
 
-  toggleActiveFilter: (button) ->
-    $('.active-filter').fadeTo( 1000, 1 )
-    $('.active-filter').toggleClass("active-filter")
-    $(button).toggleClass("active-filter")
-    $(button).fadeTo( 1000, .5 )
+  # Render filter according to name
+  renderFilter: (filter_name) ->
+    switch filter_name
+      when 'xxpro' then Filters.camanCanvas.xxpro()
+      when 'toasty' then Filters.camanCanvas.toasty()
+      when 'memphis' then Filters.camanCanvas.memphis()
+      when 'colt' then Filters.camanCanvas.colt()
+      when 'domo' then Filters.camanCanvas.domo()
+      when 'arkham' then Filters.camanCanvas.arkham()
 
-  registerFilters: ->
-    Caman.Filter.register "xxpro", ->
-     # @newLayer ->
-     #   @setBlendingMode("multiply")
-     #   @opacity(50);
-     #   @fillColor("#f5f2f2")
+    # Set last filter used for naming the file later and re-enable buttons
+    Filters.lastFilterUsed = filter_name
+    Filters.camanCanvas.render ->
+      Filters.enableButtons()
 
-     @curves('rgb', [0, 0], [79, 46], [152, 149], [255, 255])
-     @contrast(6)
-     @curves('b', [0, 45], [55, 73], [170, 145], [255, 255])
+  # Convert filtered canvas to Base64 and strip out metadata
+  # Upload image to filepicker.io and trigger export modal
+  storeBase64: ->
+    raw_data = Filters.camanCanvas.toBase64()
+    raw_data = raw_data.replace("data:image/png;base64,", "")
+    filename = "#{Filters.lastFilterUsed}_#{Filters.filename}"
 
-     @contrast(8)
-     @exposure(-10)
-     @vibrance(20)
+    # If not keeping track of users' filtered photos, should find a way to avoid re-uploading photo
+    # to filepicker.io before allowing user to save the image
+    filepicker.store(raw_data, { filename: filename, base64decode: true, mimetype: 'image/png' }, (FPFile) ->
+      filepicker.export(FPFile)
+      )
 
-     this
+  disableButtons: ->
+    $('button.filter').attr("disabled", "disabled")
 
-    Caman.Filter.register "toasty", ->
-      @curves('r', [0, 71], [49, 104], [120, 172], [178, 227])
-      @curves('g', [33, 27], [86, 99], [160, 165], [214, 222])
-      @curves('b', [0, 0], [105, 100], [157, 148], [204, 195])
-      @exposure(-20)
+  enableButtons: ->
+    $('button.filter').removeAttr("disabled")
 
-      this
-
-    Caman.Filter.register "memphis", ->
-      # @newLayer ->
-      #   @setBlendingMode("softLight")
-      #   @fillColor('#f6daae')
-      #   @opacity(50)
-
-      @curves('g', [0, 0], [98, 112], [174, 204], [238, 235])
-      @curves('b', [0, 0], [64, 95], [193, 170], [255, 255])
-      @contrast(8)
-      @curves('r', [0, 0], [55, 71], [160, 184], [255, 255])
-      @curves('g', [0, 0], [53, 74], [178, 182], [255, 255])
-
-      @contrast(8)
-
-      this
-
-    Caman.Filter.register "colt", ->
-      @brightness(8)
-      @contrast(6)
-      @saturation(-9)
-      @curves('r', [11, 14], [98, 98], [174, 174], [255, 241])
-      @curves('g', [0, 4], [98, 98], [174, 174], [250, 247])
-      @curves('b', [0, 33], [44, 53], [114, 120], [252, 231])
-      @saturation(-15)
-      @brightness(-5)
-      @contrast(5)
-      @brightness(-5)
-      @contrast(9)
-      @curves('r', [0, 39], [98, 112], [174, 204], [255, 255])
-
-      @brightness(-4)
-      @contrast(3)
-
-      this
-
-    Caman.Filter.register "domo", ->
-      @brightness(8)
-      @contrast(15)
-      @curves('r', [0, 0], [86, 50], [178, 180], [255, 255])
-      @curves('g', [0, 0], [86, 50], [178, 180], [255, 255])
-      @curves('b', [0, 0], [86, 50], [178, 180], [255, 255])
-      @brightness(-5)
-
-      this
-
-    Caman.Filter.register "arkham", ->
-      @saturation(-100)
-      @contrast(5)
-      @vibrance(-10)
-      @brightness(-7)
-
-      this
 }
