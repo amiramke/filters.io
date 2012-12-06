@@ -68,6 +68,9 @@ window.Filters = {
     $('.image-clone').attr({ id: revert_id })
     revert_id = "##{revert_id}"
     Filters.camanCanvas = Caman(revert_id)
+
+
+
     $('canvas:last').remove()
     $('#filter-preview').prepend(clone)
 
@@ -85,7 +88,7 @@ window.Filters = {
   storeBase64: ->
     raw_data = Filters.camanCanvas.toBase64()
     raw_data = raw_data.replace("data:image/png;base64,", "")
-    filename = "#{Filters.lastFilterUsed}_#{Filters.filename}"
+    filename = "#{Filters.filename.replace(/\..+$/, "")}_#{Filters.lastFilterUsed}.png"
 
     # If not keeping track of users' filtered photos, should find a way to avoid re-uploading photo
     # to filepicker.io before allowing user to save the image
