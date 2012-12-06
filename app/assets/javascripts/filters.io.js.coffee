@@ -6,7 +6,7 @@ window.Filters = {
 
     # Event bindings
     $('#upload').on 'click', (event) ->
-      filepicker.pick {container: 'modal'}, (FPFile) ->
+      filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
         Filters.filename = FPFile.filename
         Filters.sendPhotoUrl(FPFile.url)
 
