@@ -22,6 +22,7 @@ window.Filters = {
   # Create a CamanInstance from .image
   # Then render filter buttons and bind events to them
   createPreview: ->
+    Filters.toggleProcessingIndicator()
     $('button').hide()
     $('.image').hide()
     $('.image-clone').hide()
@@ -39,12 +40,14 @@ window.Filters = {
       Filters.cloneCanvas()
     $('#save-button').on 'click', (event) ->
       Filters.disableButtons()
+      Filters.toggleProcessingIndicator()
       Filters.storeBase64()
     $('button.filter').on 'click', (event) ->
-      Filters.applyFilter()
+      Filters.applyFilter(event)
 
-  applyFilter: =>
+  applyFilter: (event) ->
     Filters.disableButtons()
+    Filters.toggleProcessingIndicator()
     Filters.toggleActiveFilter(event.target)
     Filters.cloneCanvas()
     Filters.renderFilter(event.target.id)
@@ -75,6 +78,7 @@ window.Filters = {
     Filters.camanCanvas[filter_name]()
     Filters.camanCanvas.render ->
       Filters.enableButtons()
+      Filters.toggleProcessingIndicator()
 
   # Convert filtered canvas to Base64 and strip out metadata
   # Upload image to filepicker.io and trigger export modal
@@ -87,6 +91,7 @@ window.Filters = {
     # to filepicker.io before allowing user to save the image
     filepicker.store raw_data, { filename: filename, base64decode: true, mimetype: 'image/png' }, (FPFile) ->
       filepicker.export(FPFile)
+      Filters.toggleProcessingIndicator()
       Filters.enableButtons()
 
   disableButtons: ->
@@ -94,5 +99,8 @@ window.Filters = {
 
   enableButtons: ->
     $('button').removeAttr("disabled")
+
+  toggleProcessingIndicator: ->
+    $('#processing img').toggle()
 
 }
