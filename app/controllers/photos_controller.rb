@@ -5,11 +5,6 @@ class PhotosController < ApplicationController
   respond_to :json
 
   def index
-    if params[:newImage]
-      respond_to do |format|
-        format.html { render partial: 'photos/landing'}
-      end
-    end
   end
 
   def show

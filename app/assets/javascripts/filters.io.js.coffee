@@ -6,7 +6,10 @@ window.Filters = {
 
   createUploadBinding: ->
     $('#upload').on 'click', (event) ->
-      filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
+      Filters.pickPhoto()
+      
+  pickPhoto: ->
+    filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
         Filters.filename = FPFile.filename
         Filters.sendPhotoUrl(FPFile.url)
 
@@ -37,7 +40,7 @@ window.Filters = {
 
   createFilterBindings: ->
     $('#new-button').on 'click', (event) ->
-      Filters.newImage()
+      Filters.pickPhoto() if confirm("Are you sure?")
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
       Filters.cloneCanvas()
@@ -47,12 +50,6 @@ window.Filters = {
       Filters.storeBase64()
     $('button.filter').on 'click', (event) ->
       Filters.applyFilter(event)
-
-  newImage: ->
-    api = api || @api
-    api.newImage().complete (data) ->
-      Filters.renderHTML(data.responseText)
-      Filters.createUploadBinding()
 
   applyFilter: (event) ->
     Filters.disableButtons()
