@@ -1,10 +1,5 @@
 describe("Filters", function() {
   describe("#init", function() {
-    it("starts with an applyCount of 0", function() {
-      filepicker = 'STRING'
-      Filters.init(filepicker);
-      expect(Filters.applyCount).toBe(0);
-    });
   });
 
   describe("#sendPhotoUrl", function() {

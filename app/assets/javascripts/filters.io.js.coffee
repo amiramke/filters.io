@@ -2,7 +2,6 @@ window.Filters = {
 
   init: (filepicker, api)->
     Filters.api = api
-    Filters.applyCount = 0
     Filters.createUploadBinding()
 
   sendPhotoUrl: (url, api) ->
@@ -60,24 +59,12 @@ window.Filters = {
     $(button).fadeTo( 1000, .5 )
 
   # Clone .image-clone element
-  # Use Filters.applyCount to work around Caman limitation with re-using class/id names
   # Add cloned element to DOM
   cloneCanvas: ->
     clone = $('.image-clone').clone()
-    revert_id = "revert#{Filters.applyCount}"
-    $('.image-clone').attr({ id: revert_id })
-    revert_id = "##{revert_id}"
-    count = 0
-    Caman.Event.listen "processStart", (job) ->
-      console.log("#{count += 1}")
-    Filters.camanCanvas = Caman(revert_id)
-
-
+    Filters.camanCanvas = Caman('.image-clone')
     $('canvas:last').remove()
     $('#filter-preview').prepend(clone)
-
-    # Used to work around Caman limitation with re-using class/id names
-    Filters.applyCount += 1
 
   renderFilter: (filter_name) ->
     Filters.camanCanvas[filter_name]()
