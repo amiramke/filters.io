@@ -4,6 +4,12 @@ window.Filters = {
     Filters.api = api
     Filters.createUploadBinding()
 
+  createUploadBinding: ->
+    $('#upload').on 'click', (event) ->
+      filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
+        Filters.filename = FPFile.filename
+        Filters.sendPhotoUrl(FPFile.url)
+
   sendPhotoUrl: (url, api) ->
     api = api || @api
     api.sendPhotoUrl(url).complete (data) ->
@@ -31,9 +37,7 @@ window.Filters = {
 
   createFilterBindings: ->
     $('#new-button').on 'click', (event) ->
-      Filters.api.newImage().complete (data) ->
-        $('#container').html(data.responseText)
-        Filters.createUploadBinding()
+      Filters.newImage()
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
       Filters.cloneCanvas()
@@ -43,6 +47,12 @@ window.Filters = {
       Filters.storeBase64()
     $('button.filter').on 'click', (event) ->
       Filters.applyFilter(event)
+
+  newImage: ->
+    api = api || @api
+    api.newImage().complete (data) ->
+      Filters.renderHTML(data.responseText)
+      Filters.createUploadBinding()
 
   applyFilter: (event) ->
     Filters.disableButtons()
@@ -85,12 +95,6 @@ window.Filters = {
       filepicker.export(FPFile)
       Filters.toggleProcessingIndicator()
       Filters.enableButtons()
-
-  createUploadBinding: ->
-    $('#upload').on 'click', (event) ->
-      filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
-        Filters.filename = FPFile.filename
-        Filters.sendPhotoUrl(FPFile.url)
 
   disableButtons: ->
     $('button').attr("disabled", "disabled")
