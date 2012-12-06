@@ -50,6 +50,7 @@ window.Filters = {
     Filters.renderFilter(event.target.id)
 
   toggleActiveFilter: (button) ->
+    Filters.lastFilterUsed = $(button).attr("id")
     $('.active-filter').fadeTo( 1, 1 )
     $('.active-filter').toggleClass("active-filter")
     $(button).toggleClass("active-filter")
@@ -72,7 +73,6 @@ window.Filters = {
 
   renderFilter: (filter_name) ->
     Filters.camanCanvas[filter_name]()
-    Filters.lastFilterUsed = filter_name
     Filters.camanCanvas.render ->
       Filters.enableButtons()
 
