@@ -1,38 +1,28 @@
 describe("Filters", function() {
-
   describe("#init", function() {
     it("starts with an applyCount of 0", function() {
-      Filters.init();
-
+      filepicker = 'STRING'
+      Filters.init(filepicker);
       expect(Filters.applyCount).toBe(0);
     });
   });
 
   describe("#sendPhotoUrl", function() {
-    it("makes an ajax call to the correct url", function() {
-      spyOn($, "ajax");
-      Filters.sendPhotoUrl('http://image.com/img.png');
-      expect($.ajax.mostRecentCall.args[0]["url"]).toBe('http://localhost:3000/photos');
+    beforeEach(function() {
+      var api = { sendPhotoUrl: function()  { return {  complete: function(callback) { callback("woo"); } } } }
+      spyOn(Filters, 'renderHTML');
+      spyOn(Filters, 'createPreview');
+      Filters.sendPhotoUrl('http://image.com/img.png', api);
     });
 
-    it("executes the correct callbacks on complete", function() {
-      spyOn($, 'ajax').andCallFake(function(options) {
-        var json = {responseText: 'response'};
-        options.complete(json);
-      })
+    describe("When it completes successully", function() {
+      it("Renders the html with the api response", function() {
+        expect(Filters.renderHTML).toHaveBeenCalledWith("woo");
+      });
 
-      Filters.sendPhotoUrl('http://image.com/img.png');
-      expect(Filters.renderHTML()).toHaveBeenCalled();
-      expect(Filters.createPreview()).toHaveBeenCalled();
+      it("creates the preview", function() {
+        expect(Filters.createPreview).toHaveBeenCalled();
+      });
     });
   });
-
-  describe("#renderFilterButtons", function() {
-    it("appends filter buttons to the correct container", function() {
-
-    });
-
-
-  });
-
 });

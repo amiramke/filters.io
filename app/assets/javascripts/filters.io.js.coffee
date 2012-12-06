@@ -1,10 +1,7 @@
-$(document).ready ->
-  Filters.init()
-  filepicker.setKey('A8bPQLUeRg6RglPocYMdGz')
-
 window.Filters = {
 
-  init: ->
+  init: (filepicker, api)->
+    Filters.api = api
     Filters.applyCount = 0
 
     # Event bindings
@@ -13,24 +10,17 @@ window.Filters = {
         Filters.filename = FPFile.filename
         Filters.sendPhotoUrl(FPFile.url)
 
-  # Save the url of where the photo is stored in the database
-  sendPhotoUrl: (url) ->
-    $.ajax({
-      type: 'POST'
-      url: '<%= APP_HOST %>/photos'
-      dataType: 'json'
-      data: { photo: {url: url} }
-      complete: (json, response) ->
-        Filters.renderHTML(json.responseText)
-        Filters.createPreview()
-      })
+  sendPhotoUrl: (url, api) ->
+    api = api || @api
+    api.sendPhotoUrl(url).complete (response) ->
+      Filters.renderHTML(response.responseText)
+      Filters.createPreview()
 
   renderHTML: (html_string) ->
     $('div#container').html(html_string)
 
-  # Hide the two images & buttons from the partial
   # Create a CamanInstance from .image
-  # Then render filter buttons and bind events to them when canvas is rendered
+  # Then render filter buttons and bind events to them
   createPreview: ->
     $('button').hide()
     $('.image').hide()
@@ -48,25 +38,26 @@ window.Filters = {
       Filters.toggleActiveFilter(@)
       Filters.cloneCanvas()
     $('#save-button').on 'click', (event) ->
+      Filters.disableButtons()
       Filters.storeBase64()
     $('button.filter').on 'click', (event) ->
       Filters.applyFilter()
 
-  # Disable all filter buttons while filter is being applied
-  # Clone the canvas for future use
-  # Render the specific filter related to click event
-  applyFilter: ->
+  applyFilter: =>
     Filters.disableButtons()
     Filters.toggleActiveFilter(event.target)
     Filters.cloneCanvas()
     Filters.renderFilter(event.target.id)
 
   toggleActiveFilter: (button) ->
-    $('.active-filter').fadeTo( 1000, 1 )
+    $('.active-filter').fadeTo( 1, 1 )
     $('.active-filter').toggleClass("active-filter")
     $(button).toggleClass("active-filter")
     $(button).fadeTo( 1000, .5 )
 
+  # Clone .image-clone element
+  # Use Filters.applyCount to work around Caman limitation with re-using class/id names
+  # Add cloned element to DOM
   cloneCanvas: ->
     clone = $('.image-clone').clone()
     revert_id = "revert#{Filters.applyCount}"
@@ -96,11 +87,12 @@ window.Filters = {
     # to filepicker.io before allowing user to save the image
     filepicker.store raw_data, { filename: filename, base64decode: true, mimetype: 'image/png' }, (FPFile) ->
       filepicker.export(FPFile)
+      Filters.enableButtons()
 
   disableButtons: ->
-    $('button.filter').attr("disabled", "disabled")
+    $('button').attr("disabled", "disabled")
 
   enableButtons: ->
-    $('button.filter').removeAttr("disabled")
+    $('button').removeAttr("disabled")
 
 }
