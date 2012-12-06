@@ -41,9 +41,9 @@ window.Filters = {
       Filters.disableButtons()
       Filters.storeBase64()
     $('button.filter').on 'click', (event) ->
-      Filters.applyFilter()
+      Filters.applyFilter(event)
 
-  applyFilter: =>
+  applyFilter: (event) ->
     Filters.disableButtons()
     Filters.toggleActiveFilter(event.target)
     Filters.cloneCanvas()
