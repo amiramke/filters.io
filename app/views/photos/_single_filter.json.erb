@@ -1,7 +1,9 @@
 <div id="filter-preview">
   <img class='image-clone' crossorigin='anonymous' data-camanheight='450' src=<%= @photo.url%>>
   <img class='image' crossorigin='anonymous' data-camanheight='450' src=<%= @photo.url%>>
+  <div id="loading"><%= image_tag "processing.gif" %></div>
   <div id="filter-buttons"></div>
+    <button class='action' id='new-button'>new</button>
     <button class='action' id='original'>original</button>
     <button class='action filter' id='xxpro'>xxpro</button>
     <button class='action filter' id='toasty'>toasty</button>

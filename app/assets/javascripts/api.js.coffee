@@ -8,3 +8,10 @@ class window.API
         dataType: 'json'
         data: { photo: { url: url } }
       }
+    @newImage = ->
+      $.ajax {
+        type: 'GET'
+        url: "#{host}/photos"
+        dataType: 'json'
+        data: {newImage: 'true'}
+      }

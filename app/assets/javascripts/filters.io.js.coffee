@@ -3,17 +3,12 @@ window.Filters = {
   init: (filepicker, api)->
     Filters.api = api
     Filters.applyCount = 0
-
-    # Event bindings
-    $('#upload').on 'click', (event) ->
-      filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
-        Filters.filename = FPFile.filename
-        Filters.sendPhotoUrl(FPFile.url)
+    Filters.createUploadBinding()
 
   sendPhotoUrl: (url, api) ->
     api = api || @api
-    api.sendPhotoUrl(url).complete (response) ->
-      Filters.renderHTML(response.responseText)
+    api.sendPhotoUrl(url).complete (data) ->
+      Filters.renderHTML(data.responseText)
       Filters.createPreview()
 
   renderHTML: (html_string) ->
@@ -27,6 +22,7 @@ window.Filters = {
     $('.image').hide()
     $('.image-clone').hide()
     Filters.camanCanvas = Caman '.image', ->
+      $('#loading').remove()
       Filters.renderFilterButtons()
       Filters.createFilterBindings()
 
@@ -35,6 +31,10 @@ window.Filters = {
     Filters.toggleActiveFilter($('#original'))
 
   createFilterBindings: ->
+    $('#new-button').on 'click', (event) ->
+      Filters.api.newImage().complete (data) ->
+        $('#container').html(data.responseText)
+        Filters.createUploadBinding()
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
       Filters.cloneCanvas()
@@ -67,8 +67,10 @@ window.Filters = {
     revert_id = "revert#{Filters.applyCount}"
     $('.image-clone').attr({ id: revert_id })
     revert_id = "##{revert_id}"
+    count = 0
+    Caman.Event.listen "processStart", (job) ->
+      console.log("#{count += 1}")
     Filters.camanCanvas = Caman(revert_id)
-
 
 
     $('canvas:last').remove()
@@ -96,6 +98,12 @@ window.Filters = {
       filepicker.export(FPFile)
       Filters.toggleProcessingIndicator()
       Filters.enableButtons()
+
+  createUploadBinding: ->
+    $('#upload').on 'click', (event) ->
+      filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
+        Filters.filename = FPFile.filename
+        Filters.sendPhotoUrl(FPFile.url)
 
   disableButtons: ->
     $('button').attr("disabled", "disabled")
