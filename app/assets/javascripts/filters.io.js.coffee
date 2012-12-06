@@ -1,10 +1,8 @@
-$(document).ready ->
-  Filters.init()
-  filepicker.setKey('A8bPQLUeRg6RglPocYMdGz')
-
 window.Filters = {
 
-  init: ->
+  init: (filepicker, api)->
+    @api = api
+    # Workaround for CamanJS store method that does not let us access the same id or class twice
     Filters.applyCount = 0
 
     # Event bindings
@@ -13,24 +11,21 @@ window.Filters = {
         Filters.filename = FPFile.filename
         Filters.sendPhotoUrl(FPFile.url)
 
-  # Save the url of where the photo is stored in the database
-  sendPhotoUrl: (url) ->
-    $.ajax({
-      type: 'POST'
-      url: '<%= APP_HOST %>/photos'
-      dataType: 'json'
-      data: { photo: {url: url} }
-      complete: (json, response) ->
-        Filters.renderHTML(json.responseText)
-        Filters.createPreview()
-      })
+  # Saves the url of where the photo is stored in the database
+  sendPhotoUrl: (url, api) ->
+    api = api || @api;
+    api.sendPhotoUrl(url).complete (text) ->
+      Filters.renderHTML(text)
+      Filters.createPreview()
 
+  # Replace container contents with new html
+  # Usually html contains the images in a partial from the rails backend
   renderHTML: (html_string) ->
     $('div#container').html(html_string)
 
   # Hide the two images & buttons from the partial
   # Create a CamanInstance from .image
-  # Then render filter buttons and bind events to them when canvas is rendered
+  # Then render filter buttons and bind events to them
   createPreview: ->
     $('button').hide()
     $('.image').hide()
@@ -39,10 +34,12 @@ window.Filters = {
       Filters.renderFilterButtons()
       Filters.createFilterBindings()
 
+  # Append buttons to #filter-buttons div and select Original as active
   renderFilterButtons: ->
     $('button').show()
     Filters.toggleActiveFilter($('#original'))
 
+  # Register click event listeners on filter buttons
   createFilterBindings: ->
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(@)
@@ -55,18 +52,22 @@ window.Filters = {
   # Disable all filter buttons while filter is being applied
   # Clone the canvas for future use
   # Render the specific filter related to click event
-  applyFilter: ->
+  applyFilter: =>
     Filters.disableButtons()
     Filters.toggleActiveFilter(event.target)
     Filters.cloneCanvas()
     Filters.renderFilter(event.target.id)
 
+  # Fade in / fade out effect and set active class on clicked button
   toggleActiveFilter: (button) ->
     $('.active-filter').fadeTo( 1000, 1 )
     $('.active-filter').toggleClass("active-filter")
     $(button).toggleClass("active-filter")
     $(button).fadeTo( 1000, .5 )
 
+  # Clone .image-clone element
+  # Use Filters.applyCount to work around Caman limitation with re-using class/id names
+  # Add cloned element to DOM
   cloneCanvas: ->
     clone = $('.image-clone').clone()
     revert_id = "revert#{Filters.applyCount}"
@@ -79,6 +80,7 @@ window.Filters = {
     # Used to work around Caman limitation with re-using class/id names
     Filters.applyCount += 1
 
+  # Render filter according to name
   renderFilter: (filter_name) ->
     Filters.camanCanvas[filter_name]()
     Filters.lastFilterUsed = filter_name

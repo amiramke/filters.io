@@ -28,6 +28,7 @@ end
 group :test, :development do
   gem 'rspec-rails'
   gem 'jasmine'
+  gem 'jasminerice'
 end
 
 group :test do

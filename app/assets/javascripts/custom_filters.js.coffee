@@ -1,7 +1,4 @@
-$(document).ready ->
-   CustomFilters.registerFilters()
-
-CustomFilters = {
+window.CustomFilters = {
 
   registerFilters: ->
     Caman.Filter.register "xxpro", ->
