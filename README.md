@@ -17,8 +17,8 @@ Filters.io Team:
 - ~~deploy to heroku~~
 - ~~disable buttons while rendering filter~~
 - ~~disable buttons while saving~~
-- Loading indicator
-- Rendering indicator
+- ~~Loading indicator~~
+- ~~Rendering indicator~~
 - More filters
 - Batch upload
 - User accounts
