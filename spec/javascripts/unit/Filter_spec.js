@@ -12,7 +12,7 @@ describe("Filters", function() {
 
     describe("When it completes successully", function() {
       it("Renders the html with the api response", function() {
-        expect(Filters.renderHTML).toHaveBeenCalledWith("woo");
+        expect(Filters.renderPartial).toHaveBeenCalledWith("woo");
       });
 
       it("creates the preview", function() {

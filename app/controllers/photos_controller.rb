@@ -1,14 +1,8 @@
 class PhotosController < ApplicationController
 
-  require 'open-uri'
-
   respond_to :json
 
   def index
-  end
-
-  def show
-    @photo = Photo.find(params[:id])
   end
 
   def create

@@ -2,5 +2,5 @@ $(document).ready ->
   # Don't use filepicker for tests
   if typeof filepicker != 'undefined'
     filepicker.setKey('A8bPQLUeRg6RglPocYMdGz')
-    Filters.init(filepicker, new API "<%= APP_HOST %>")
+    Filters.init(new API "<%= APP_HOST %>")
   CustomFilters.registerFilters()

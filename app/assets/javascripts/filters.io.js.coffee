@@ -1,6 +1,6 @@
 window.Filters = {
 
-  init: (filepicker, api)->
+  init: (api)->
     Filters.api = api
     Filters.createUploadBinding()
 
@@ -9,17 +9,18 @@ window.Filters = {
       Filters.pickPhoto()
       
   pickPhoto: ->
-    filepicker.pick {container: 'modal', services: ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']}, (FPFile) ->
-        Filters.filename = FPFile.filename
-        Filters.sendPhotoUrl(FPFile.url)
+    services = ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']
+    filepicker.pick { container: 'modal', services: services}, (FPFile) ->
+      Filters.filename = FPFile.filename
+      Filters.sendPhotoUrl(FPFile.url)
 
   sendPhotoUrl: (url, api) ->
     api = api || @api
     api.sendPhotoUrl(url).complete (data) ->
-      Filters.renderHTML(data.responseText)
+      Filters.renderPartial(data.responseText)
       Filters.createPreview()
 
-  renderHTML: (html_string) ->
+  renderPartial: (html_string) ->
     $('div#container').html(html_string)
 
   # Create a CamanInstance from .image
@@ -42,7 +43,7 @@ window.Filters = {
     $('#new-button').on 'click', (event) ->
       Filters.pickPhoto() if confirm("Are you sure?")
     $('#original').on 'click', (event) ->
-      Filters.toggleActiveFilter(@)
+      Filters.toggleActiveFilter(event.target)
       Filters.cloneCanvas()
     $('#save-button').on 'click', (event) ->
       Filters.disableButtons()
