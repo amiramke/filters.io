@@ -41,7 +41,7 @@ window.Filters = {
 
   createFilterBindings: ->
     $('#new-button').on 'click', (event) ->
-      Filters.pickPhoto() if confirm("Are you sure?")
+      Filters.pickPhoto()
     $('#original').on 'click', (event) ->
       Filters.toggleActiveFilter(event.target)
       Filters.cloneCanvas()
