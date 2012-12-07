@@ -9,7 +9,7 @@ window.Filters = {
       Filters.pickPhoto()
       
   pickPhoto: ->
-    services = ['COMPUTER', 'URL', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM', 'IMAGE_SEARCH']
+    services = ['COMPUTER', 'URL', 'IMAGE_SEARCH', 'FACEBOOK', 'INSTAGRAM', 'DROPBOX', 'FLICKR', 'WEBCAM']
     filepicker.pick { container: 'modal', services: services}, (FPFile) ->
       Filters.filename = FPFile.filename
       Filters.sendPhotoUrl(FPFile.url)
